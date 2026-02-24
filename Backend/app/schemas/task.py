@@ -19,3 +19,11 @@ class TaskResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class TaskUpdate(BaseModel):
+    title: str | None = None
+    description: str | None = None
+    scheduled_date: date | None = None
+    planned_duration: int | None = None
+    completed: bool | None = None

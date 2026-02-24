@@ -11,18 +11,6 @@ class UserResponse(BaseModel):
     class Config:
         from_attributes = True
 
-
-class TaskCreate(BaseModel):
-    title: str
-    description: str
-    completed: bool = False
-
-class TaskResponse(TaskCreate):
-    id: int
-
-    class Config:
-        from_attributes = True
-
 class UserLogin(BaseModel):
     email: str
     password: str
