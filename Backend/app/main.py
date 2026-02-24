@@ -7,6 +7,7 @@ from app.db.deps import get_db
 from app import crud, schemas
 from app.routers import auth_router
 from app.core.security import get_current_user, hash_password
+from app.routers import task_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -49,3 +50,8 @@ def login(data: schemas.LoginRequest, db: Session = Depends(get_db)):
 @app.get("/me")
 def read_me(current_user: User = Depends(get_current_user)):
     return current_user
+
+
+
+
+app.include_router(task_router.router)

@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from app.db.session import Base
+from sqlalchemy.orm import relationship
 
 class User(Base):
     __tablename__ = "users"
@@ -8,4 +9,4 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
 
-    
+    tasks = relationship("Task", back_populates="owner")
