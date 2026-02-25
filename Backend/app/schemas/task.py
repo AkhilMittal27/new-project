@@ -27,3 +27,6 @@ class TaskUpdate(BaseModel):
     scheduled_date: date | None = None
     planned_duration: int | None = None
     completed: bool | None = None
+
+
+    

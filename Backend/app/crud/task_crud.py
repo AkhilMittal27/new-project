@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from app.models.task import Task
 from app.schemas.task import TaskCreate
-from datetime import datetime
+from datetime import date, datetime
 
 
 def create_task(db: Session, user_id: int, task: TaskCreate):
@@ -43,3 +43,29 @@ def stop_timer(db: Session, task: Task):
     db.commit()
     db.refresh(task)
     return task
+
+
+def update_task(db: Session, task: Task, updates):
+    for key, value in updates.items():
+        setattr(task, key, value)
+
+    db.commit()
+    db.refresh(task)
+    return task
+
+def delete_task(db: Session, task: Task):
+    db.delete(task)
+    db.commit()
+
+
+
+def get_daily_summary(db: Session, user_id: int, target_date: date):
+    tasks = db.query(Task).filter(
+        Task.user_id == user_id,
+        Task.scheduled_date == target_date
+    ).all()
+
+    total_time = sum(task.elapsed_seconds for task in tasks)
+    completed_tasks = sum(1 for task in tasks if task.completed)
+
+    return total_time, completed_tasks
