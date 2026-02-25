@@ -1,26 +1,19 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL!;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function apiFetch(
-  endpoint: string,
-  options: RequestInit = {}
-) {
-  const token =
-    typeof window !== "undefined"
-      ? localStorage.getItem("token")
-      : null;
+export async function apiFetch(path: string, options: RequestInit = {}) {
+  const token = localStorage.getItem("token");
 
-  const res = await fetch(`${API_URL}${endpoint}`, {
+  const res = await fetch(`${API_URL}${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(token && { Authorization: `Bearer ${token}` }),
       ...options.headers,
     },
   });
 
   if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text);
+    throw new Error("API request failed");
   }
 
   return res.json();
