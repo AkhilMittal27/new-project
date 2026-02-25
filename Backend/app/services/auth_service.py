@@ -1,10 +1,10 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from app import crud
+from app.crud import get_user_by_email
 from app.core.security import verify_password, create_access_token
 
 def login_user(db: Session, email: str, password: str):
-    user = crud.get_user_by_email(db, email)
+    user = get_user_by_email(db, email)
 
     if not user:
         raise HTTPException(status_code=400, detail="Invalid credentials")
