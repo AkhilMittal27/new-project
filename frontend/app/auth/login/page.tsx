@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { apiFetch } from "@/lib/api";
+import apiFetch from "@/lib/api";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -11,12 +11,13 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     try {
-      const data = await apiFetch("/auth/login", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
+      const res = await apiFetch.post("/auth/login", {
+        email,
+        password,
       });
 
-      localStorage.setItem("token", data.access_token);
+      localStorage.setItem("token", res.data.access_token);
+
       router.push("/tasks");
     } catch (err) {
       alert("Login failed");
@@ -35,16 +36,16 @@ export default function LoginPage() {
       />
 
       <input
-        type="password"
         className="border p-2"
+        type="password"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
 
       <button
+        className="bg-blue-500 text-white p-2 rounded"
         onClick={handleLogin}
-        className="bg-black text-white p-2 rounded"
       >
         Login
       </button>

@@ -1,20 +1,21 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import axios, { InternalAxiosRequestConfig } from "axios"
+import { API_BASE_URL } from "./constants"
 
-export async function apiFetch(path: string, options: RequestInit = {}) {
-  const token = localStorage.getItem("token");
+const apiFetch = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+})
 
-  const res = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-      ...options.headers,
-    },
-  });
+apiFetch.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const token = localStorage.getItem("token")
 
-  if (!res.ok) {
-    throw new Error("API request failed");
+  if (token && config.headers) {
+    config.headers.Authorization = `Bearer ${token}`
   }
 
-  return res.json();
-}
+  return config
+})
+
+export default apiFetch

@@ -1,9 +1,8 @@
-import { apiFetch } from "@/lib/api";
+import apiFetch from "@/lib/api";
 
 export async function getTasks() {
-  return apiFetch("/tasks", {
-    method: "GET",
-  });
+  const res = await apiFetch.get("/tasks");
+  return res.data;
 }
 
 export async function createTask(payload: {
@@ -12,41 +11,22 @@ export async function createTask(payload: {
   scheduled_date?: string;
   duration_minutes?: number;
 }) {
-  return apiFetch("/tasks", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+  
+  const res = await apiFetch.post("/tasks", payload);
+  return res.data;
 }
 
 export async function startTask(taskId: number) {
-  return apiFetch(`/tasks/${taskId}/start`, {
-    method: "POST",
-  });
+  const res = await apiFetch.post(`/tasks/${taskId}/start`);
+  return res.data;
 }
 
 export async function stopTask(taskId: number) {
-  return apiFetch(`/tasks/${taskId}/stop`, {
-    method: "POST",
-  });
+  const res = await apiFetch.post(`/tasks/${taskId}/stop`);
+  return res.data;
 }
 
 export async function getTaskTimeStatus(taskId: number) {
-  return apiFetch(`/tasks/${taskId}/time-status`);
-}
-
-export async function updateTask(taskId: number, payload: {
-  title?: string;
-  description?: string;
-  completed?: boolean;
-}) {
-  return apiFetch(`/tasks/${taskId}`, {
-    method: "PATCH",
-    body: JSON.stringify(payload),
-  });
-}
-
-export async function deleteTask(taskId: number) {
-  return apiFetch(`/tasks/${taskId}`, {
-    method: "DELETE",
-  });
+  const res = await apiFetch.get(`/tasks/${taskId}/time-status`);
+  return res.data;
 }
