@@ -11,7 +11,7 @@ export async function createTask(payload: {
   scheduled_date?: string;
   duration_minutes?: number;
 }) {
-  
+
   const res = await apiFetch.post("/tasks", payload);
   return res.data;
 }
