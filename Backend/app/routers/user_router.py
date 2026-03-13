@@ -6,7 +6,7 @@ from app.db.deps import get_db
 from app.schemas.user import UserCreate, UserResponse
 from app.crud.user_crud import  get_users as get_users_db
 from app import crud
-# from app.core.security import hash_password
+from app.core.security import hash_password
 
 router = APIRouter(prefix="/users", tags=["Users"])
 

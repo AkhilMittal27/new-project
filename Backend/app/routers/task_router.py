@@ -4,6 +4,7 @@ from datetime import date
 
 from app.db.deps import get_db
 from app.core.security import get_current_user
+from app.models.user import User
 from app.schemas.task import TaskCreate, TaskResponse, TaskUpdate
 from app.services.task_service import (
     create_task_for_user,
@@ -77,7 +78,9 @@ def delete_task_endpoint(task_id: int,
 
 # ✅ DAILY ANALYTICS
 @router.get("/analytics/daily")
-def daily_summary(date: date,
-                  db: Session = Depends(get_db),
-                  current_user = Depends(get_current_user)):
-    return get_user_daily_summary(db, current_user.id, date)
+def daily_summary(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+    selected_date: date = date.today(),
+):
+    return get_user_daily_summary(db, current_user.id, selected_date)
