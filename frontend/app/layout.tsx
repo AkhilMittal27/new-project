@@ -1,5 +1,10 @@
 import "./globals.css";
 
+export const metadata = {
+  title: "Task Manager",
+  description: "Task Management App",
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -7,9 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-gray-50 text-gray-900">
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

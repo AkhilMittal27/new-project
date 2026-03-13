@@ -12,7 +12,6 @@ export default function TasksPage() {
   const [loading, setLoading] = useState(true);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
-  // 🔄 Fetch tasks
   async function fetchTasks() {
     try {
       const data = await getTasks();
@@ -28,69 +27,86 @@ export default function TasksPage() {
     fetchTasks();
   }, []);
 
-  // 🗑 Delete task
   async function handleDelete(taskId: number) {
     if (!confirm("Delete this task?")) return;
-
     await deleteTask(taskId);
     fetchTasks();
   }
 
-  // ✏️ Edit task
   function handleEdit(task: Task) {
     setEditingTask(task);
   }
 
-  if (loading) return <p>Loading tasks...</p>;
+  if (loading)
+    return (
+      <div className="flex justify-center mt-10">
+        <p className="text-gray-500">Loading tasks...</p>
+      </div>
+    );
 
   return (
-    <div className="space-y-6">
-      {/* ➕ Create Task */}
+    <div className="max-w-5xl mx-auto space-y-6">
+
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">📋 My Tasks</h1>
+      </div>
+
+      {/* Create Task */}
       <CreateTaskForm onCreated={fetchTasks} />
 
-      {/* 📋 Tasks List */}
-      <div>
-        <h1 className="text-2xl font-semibold mb-4">My Tasks</h1>
-
-        <div className="grid gap-3">
-          {tasks.map((task) => (
+      {/* Task List */}
+      <div className="grid gap-4">
+        {tasks.length === 0 ? (
+          <div className="text-center text-gray-500 py-10 bg-white rounded-lg shadow-sm">
+            No tasks yet. Create one 🚀
+          </div>
+        ) : (
+          tasks.map((task) => (
             <div
               key={task.id}
-              className="p-4 border rounded-lg bg-white shadow-sm"
+              className="bg-white rounded-xl shadow-sm border p-5 hover:shadow-md transition"
             >
-              <h3 className="font-semibold">{task.title}</h3>
+              {/* Top */}
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-semibold text-lg">{task.title}</h3>
 
-              {task.description && (
-                <p className="text-sm text-gray-600">
-                  {task.description}
-                </p>
-              )}
+                  {task.description && (
+                    <p className="text-sm text-gray-500 mt-1">
+                      {task.description}
+                    </p>
+                  )}
+                </div>
+              </div>
 
-              {/* ⏱ Timer */}
-              <TaskTimer taskId={task.id} />
+              {/* Timer */}
+              <div className="mt-3">
+                <TaskTimer taskId={task.id} />
+              </div>
 
-              {/* ✏️ Edit + Delete */}
-              <div className="flex gap-2 mt-3">
+              {/* Actions */}
+              <div className="flex gap-2 mt-4">
                 <button
                   onClick={() => handleEdit(task)}
-                  className="px-2 py-1 border rounded text-sm"
+                  className="px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-100"
                 >
                   Edit
                 </button>
 
                 <button
                   onClick={() => handleDelete(task.id)}
-                  className="px-2 py-1 bg-red-500 text-white rounded text-sm"
+                  className="px-3 py-1.5 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600"
                 >
                   Delete
                 </button>
               </div>
             </div>
-          ))}
-        </div>
+          ))
+        )}
       </div>
 
-      {/* 🪟 Edit Modal */}
+      {/* Edit Modal */}
       {editingTask && (
         <EditTaskModal
           task={editingTask}

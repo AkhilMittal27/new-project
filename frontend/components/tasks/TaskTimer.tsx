@@ -24,13 +24,18 @@ export default function TaskTimer({ taskId }: { taskId: number }) {
 
   useEffect(() => {
     fetchStatus();
+  }, [taskId]);
+
+  // 🔥 smooth live timer
+  useEffect(() => {
+    if (!running) return;
 
     const interval = setInterval(() => {
-      fetchStatus();
-    }, 5000); // poll every 5s
+      setElapsed((prev) => prev + 1);
+    }, 1000);
 
     return () => clearInterval(interval);
-  }, [taskId]);
+  }, [running]);
 
   async function handleStart() {
     setLoading(true);

@@ -1,6 +1,6 @@
 "use client"
 
-import useTasks from "@/hooks/useTask"
+import useTasks from "@/hooks/useTasks"
 import TaskCard from "@/components/tasks/TaskCard"
 
 export default function Dashboard() {

@@ -4,4 +4,5 @@ export type Task = {
   description?: string;
   completed: boolean;
   elapsed_seconds: number;
+  is_running: boolean;
 };

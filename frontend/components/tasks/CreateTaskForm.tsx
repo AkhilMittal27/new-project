@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { createTask } from "@/services/task.services";
 
-
 export default function CreateTaskForm({
   onCreated,
 }: {
@@ -12,12 +11,13 @@ export default function CreateTaskForm({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    if (!title.trim()) return alert("Title required");
+
     setLoading(true);
-    setError(null);
 
     try {
       await createTask({ title, description });
@@ -25,9 +25,9 @@ export default function CreateTaskForm({
       setTitle("");
       setDescription("");
 
-      onCreated?.(); // refresh list
-    } catch (err) {
-      setError("Failed to create task");
+      onCreated?.();
+    } catch {
+      alert("Failed to create task");
     } finally {
       setLoading(false);
     }
@@ -42,7 +42,6 @@ export default function CreateTaskForm({
         placeholder="Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        required
       />
 
       <textarea
@@ -51,8 +50,6 @@ export default function CreateTaskForm({
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-
-      {error && <p className="text-red-500 mb-2">{error}</p>}
 
       <button
         type="submit"

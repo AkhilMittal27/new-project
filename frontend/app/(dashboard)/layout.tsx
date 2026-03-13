@@ -1,6 +1,7 @@
 "use client";
 
 import Sidebar from "@/components/layout/Sidebar";
+import Header from "@/components/layout/Header";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -15,19 +16,20 @@ export default function DashboardLayout({
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      router.replace("/login");
+      router.replace("/auth/login");
     }
-  }, [loading, isAuthenticated, router]);
+  }, [loading, isAuthenticated]);
 
-  if (loading) return <p className="p-8">Checking auth...</p>;
-  if (!isAuthenticated) return null;
+  if (loading) return <p className="p-6">Checking auth...</p>;
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
-      <main className="flex-1 p-8 bg-gray-100 min-h-screen">
-        {children}
-      </main>
+
+      <div className="flex-1 flex flex-col">
+        <Header />
+        <main className="p-6">{children}</main>
+      </div>
     </div>
   );
 }
